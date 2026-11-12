@@ -1,30 +1,62 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Gaia's Wake · "Scia essenziale": il gommone sul lago e la sua scia a V come un tratto di pennino -->
+  <defs>
+    <linearGradient id="acqua" x1="160" y1="0" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A9C1E2" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#5B7FBF" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="cuneo"><path d="M160 322C116 326 70 376 16 456L0 470V294C60 302 112 314 156 328Z"/></clipPath>
+  </defs>
+
+  <!-- fondo navy pieno -->
   <rect width="512" height="512" fill="#24467E"/>
-  <path d="M-8 300V230L40 208L92 170L124 198L150 208L198 252L250 300Z" fill="#2F4F8C"/>
-  <path d="M92 170L104 208L96 250L116 300H250L198 252L150 208L124 198Z" fill="#3B63A3"/>
-  <path d="M520 300V200L470 180L416 148L386 186L352 208L312 250L266 300Z" fill="#2F4F8C"/>
-  <path d="M416 148L430 190L420 232L442 300H520V200L470 180Z" fill="#3B63A3"/>
-  <path d="M-8 296C52 284 112 282 176 292C236 302 292 304 352 294C414 284 466 282 520 290V340C466 332 414 334 352 344C292 354 236 352 176 342C112 332 52 334 -8 346Z" fill="#C2D4EC"/>
-  <path d="M-8 296C52 284 112 282 176 292C236 302 292 304 352 294C414 284 466 282 520 290" fill="none" stroke="#E3EAF5" stroke-width="5"/>
-  <g fill="none" stroke="#FFFFFF" stroke-linecap="round">
-    <path d="M138 304C112 302 86 304 58 310M136 318C108 320 82 326 56 334" stroke-width="7"/>
-    <path d="M128 292C112 290 96 290 80 292" stroke-width="5"/>
-    <path d="M122 370H192M208 370H312M328 370H390" stroke-width="8"/>
-    <path d="M148 394H234M250 394H364" stroke-width="7"/>
-    <path d="M180 418H250M264 418H332" stroke-width="6"/>
-    <path d="M216 442H296" stroke-width="5"/>
+
+  <!-- gabbiani -->
+  <g fill="none" stroke="#C2D4EC" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".85">
+    <path d="M304 86c5-6 11-6 14 0c3-6 9-6 14 0"/>
+    <path d="M342 108c4-5 8-5 11 0c3-5 7-5 11 0"/>
   </g>
-  <g transform="translate(140 298) scale(1.2)" fill="#FFFFFF" stroke="#24467E" stroke-width="3.6" stroke-linejoin="round">
-    <path d="M12 -32H25L23 6H15Z"/>
-    <path d="M7 2H31V7H7Z"/>
-    <path d="M3 -50C3 -58 9 -61 17 -61H26C32 -61 34 -56 33 -50L31 -30H7C3 -36 2 -44 3 -50Z"/>
-    <path d="M5 -43H32" fill="none"/>
-    <path d="M70 -22L72 -46Q78 -51 84 -46L86 -22Z"/>
-    <circle cx="78" cy="-57" r="8"/>
-    <path d="M92 -22L96 -50H120L128 -22Z"/>
-    <path d="M98 -50L105 -64H119L120 -50Z"/>
-    <path d="M38 -22H150C166 -22 177 -31 184 -43C188 -50 197 -48 195 -39C189 -14 172 0 150 0H38C24 0 24 -22 38 -22Z"/>
+
+  <!-- montagne del lago: sagoma e versante in luce -->
+  <path d="M0 236V204C24 200 44 184 62 160L84 132C90 124 96 124 102 132L118 150L146 112C152 104 158 104 164 112L206 166L222 156C228 152 234 152 240 158L282 206C292 216 306 222 320 220L344 188C350 180 356 180 362 188L370 196L398 150C404 142 410 142 416 150L452 196C468 212 490 218 512 220V236Z" fill="#2F4F8C"/>
+  <path d="M146 112C152 104 158 104 164 112L206 166L222 156C228 152 234 152 240 158L282 206C292 216 306 222 320 220V236H170C160 210 162 170 155 140ZM398 150C404 142 410 142 416 150L452 196C468 212 490 218 512 220V236H418C412 214 414 180 407 160ZM84 132C90 124 96 124 102 132L118 150L132 170C126 196 126 216 130 236H96C92 210 96 170 93 144Z" fill="#3B63A3" opacity=".55"/>
+  <!-- orizzonte -->
+  <path d="M0 236H512" stroke="#7E9CCB" stroke-width="3" opacity=".55"/>
+
+  <!-- acqua mossa dentro la V, a tratteggio come la mappa -->
+  <path d="M160 322C116 326 70 376 16 456L0 470V294C60 302 112 314 156 328Z" fill="url(#acqua)" opacity=".6"/>
+  <path clip-path="url(#cuneo)" d="M0 294H170 M0 303H170 M0 312H170 M0 321H170 M0 330H170 M0 339H170 M0 348H170 M0 357H170 M0 366H170 M0 375H170 M0 384H170 M0 393H170 M0 402H170 M0 411H170 M0 420H170 M0 429H170 M0 438H170 M0 447H170 M0 456H170 M0 465H170" stroke="url(#acqua)" stroke-width="3.5"/>
+  <!-- braccio lontano della scia -->
+  <path d="M160 319C120 308 70 300 2 294C68 305 114 316 154 329Z" fill="#FFFFFF"/>
+  <!-- risucchio dell'elica -->
+  <path d="M146 330C110 334 72 344 26 362C72 352 112 344 148 340Z" fill="#A9C1E2"/>
+
+  <!-- riflesso e increspature -->
+  <g stroke="#5B7FBF" stroke-width="5" stroke-linecap="round" opacity=".8">
+    <path d="M214 346H306M324 346H368"/>
+    <path d="M248 364H340"/>
   </g>
-  <circle cx="140" cy="300" r="7" fill="#FFFFFF"/>
-  <circle cx="127" cy="296" r="5" fill="#FFFFFF"/>
+  <path d="M330 420H404M372 446H430" stroke="#3B63A3" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- gommone, di lato, diretto a destra -->
+  <g transform="translate(156 320)">
+    <!-- carena -->
+    <path d="M14-16H206C196-4 176 0 156 0H14Z" fill="#7E9CCB"/>
+    <!-- Gaia al timone, coda di cavallo al vento -->
+    <path d="M84-56L86-90C86-99 106-99 106-90L108-56Z" fill="#FFFFFF"/>
+    <circle cx="97" cy="-108" r="10" fill="#FFFFFF"/>
+    <path d="M94-118C84-118 80-112 79-106C76-100 70-97 63-97C70-92 80-94 86-100C89-103 91-104 93-104Z" fill="#FFFFFF"/>
+    <!-- consolle e parabrezza -->
+    <path d="M110-56L114-86H136L152-56Z" fill="#FFFFFF"/>
+    <path d="M137-86H145L160-58H152Z" fill="#C2D4EC"/>
+    <!-- tubolare con la prua rialzata -->
+    <path d="M8-60H170C196-60 216-66 234-78C247-86 262-80 260-66C258-50 240-32 218-22C204-16 190-14 172-14H8A23 23 0 0 1 8-60Z" fill="#FFFFFF"/>
+    <path d="M12-37H174C198-37 218-44 238-58" fill="none" stroke="#C2D4EC" stroke-width="4" stroke-linecap="round"/>
+    <!-- fuoribordo -->
+    <path d="M-32-82C-32-92-10-92-8-82L-6-58H-30Z" fill="#FFFFFF"/>
+    <path d="M-26-60H-12L-14-2H-24Z" fill="#FFFFFF"/>
+  </g>
+
+  <!-- braccio vicino: l'onda di prua corre lungo lo scafo e si apre in un tratto di pennino -->
+  <path d="M420 300C400 313 362 318 310 319C250 320 198 320 162 322C118 326 72 374 14 458C84 396 122 354 164 336C204 326 270 325 330 324C382 322 408 314 420 300Z" fill="#FFFFFF"/>
 </svg>

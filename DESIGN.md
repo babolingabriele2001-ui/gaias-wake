@@ -9,9 +9,9 @@ Solo blu, bianco, azzurro e panna. **Mai verde, niente colori caldi.** Il rosso 
 
 | Token | Valore | Ruolo |
 |---|---|---|
-| `--bg` | `#F1EDE5` | carta dello sfondo (con la grana `paper.webp`) |
-| `--surface` | `#FBF9F5` | card, finestre, barre |
-| `--surface-2` | `#EFEBE3` | fondo dei campi, chip spenti |
+| `--bg` | `#FBF8F1` | panna chiara, quasi bianca: sfondo delle pagine (con la grana `paper.webp`) |
+| `--surface` | `#FFFFFF` | card, finestre, barre (si staccano dal fondo con il filo di `--shadow-1`) |
+| `--surface-2` | `#F4EFE5` | fondo dei campi, chip spenti |
 | `--ink` | `#1C2A44` | testo principale, titoli |
 | `--ink-2` | `#33415C` | etichette, testo secondario forte |
 | `--muted` | `#56657A` | testo di supporto, segnaposto |
@@ -24,9 +24,9 @@ Solo blu, bianco, azzurro e panna. **Mai verde, niente colori caldi.** Il rosso 
 
 Contrasti verificati (WCAG 2.2):
 
-- testo `--ink` 11,9–13,6:1; `--muted` 4,9–5,6:1; `--accent-2` 5,0–5,7:1 su tutti i fondi chiari;
+- testo `--ink` 11,9–14,3:1; `--muted` 4,9–5,9:1; `--accent-2` 5,0–6,0:1 su tutti i fondi chiari (panna, bianco, azzurri);
 - bianco su `--accent` 9,3:1, su `--accent-2` 6,0:1; `--danger` su card 6,0:1;
-- bordo dei campi `--field-line` ≥ 3,2:1 su carta, card e fondo dei campi (WCAG 1.4.11);
+- bordo dei campi `--field-line` ≥ 3,3:1 su carta, card e fondo dei campi (WCAG 1.4.11);
 - `--azure-500` (3,3–3,8:1) solo per grafica, mai per il testo; `--azure-300` solo decorativo.
 
 Non esiste un tema scuro: l’app è sempre «carta».
