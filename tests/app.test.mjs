@@ -708,12 +708,20 @@ test('benvenuto: alla prima apertura, una volta sola; mai a chi ha già dei rico
   assert.equal(await page.textContent('h1'), 'Benvenuta a bordo');
   assert.equal(await page.evaluate(() => document.activeElement?.tagName), 'H1', 'il titolo prende il fuoco');
   assert.equal(await page.textContent('#welcome-steps'), 'Mettila nella schermata Home');
-  assert.deepEqual(await page.$$eval('.step__title', (els) => els.map((e) => e.textContent.trim())), ['Tocca Condividi', 'Scegli «Aggiungi alla schermata Home»', 'Apri Gaia’s Wake dall’icona']);
+  assert.deepEqual(await page.$$eval('.step__title', (els) => els.map((e) => e.textContent.trim())), ['Passo 1 di 3: Tocca Condividi', 'Passo 2 di 3: Scegli «Aggiungi alla schermata Home»', 'Passo 3 di 3: Aprila subito una volta dall’icona']);
   assert.equal(await page.locator('[data-action="welcome-new"]').count(), 0, 'in Safari non invita a salvare ricordi prima di installarla');
+  assert.equal(await page.locator('[data-testid="open-in-safari"]').count(), 0, 'in Safari non chiede di aprirla in Safari');
+  assert.equal(await page.getAttribute('ol.steps', 'role'), 'list', 'VoiceOver la legge come lista anche senza pallini');
+  assert.equal(await page.textContent('.step:first-child .sr-only'), 'Passo 1 di 3: ');
   assert.equal(await page.locator('#tabbar').isVisible(), false);
+  // «Pronta offline» non copre i passi: compare solo dopo aver lasciato il benvenuto.
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.waitForTimeout(400);
+  assert.equal(await page.locator('.toast', { hasText: 'pronta' }).count(), 0, 'nessun avviso sopra il benvenuto');
   await page.click('[data-action="welcome-start"]');
   await page.waitForSelector('[data-testid="total-count"]');
   assert.equal(new URL(page.url()).hash, '#/');
+  await page.waitForSelector('.toast:has-text("pronta")');
   await page.reload();
   await page.waitForSelector('[data-testid="total-count"]');
   assert.equal(await page.locator('.welcome').count(), 0, 'il benvenuto non torna');
@@ -736,7 +744,34 @@ test('benvenuto: alla prima apertura, una volta sola; mai a chi ha già dei rico
   await page.click('[data-action="welcome-new"]');
   await page.waitForSelector('form.form');
   assert.equal(new URL(page.url()).hash, '#/nuova');
+  await page.click('[data-action="cancel"]');
+  await page.waitForSelector('[data-testid="total-count"]');
+  assert.ok(page.url().startsWith(srv.base), 'Annulla resta nell’app');
+  assert.equal(new URL(page.url()).hash, '#/');
   assert.deepEqual(errors, []);
+  await ctx.close();
+
+  // Stesso percorso, ma salvando: dal primo ricordo «Indietro» porta al diario, non fuori dall'app.
+  ctx = await newContext();
+  await ctx.addInitScript(() => Object.defineProperty(Navigator.prototype, 'standalone', { get: () => true }));
+  ({ page, errors } = await openApp(ctx, srv.base, '', { welcome: true }));
+  await page.click('[data-action="welcome-new"]');
+  await page.waitForSelector('form.form');
+  await fillForm(page, { title: 'La prima scia' });
+  await page.click('[data-action="save"]');
+  await page.waitForSelector('.memory-page');
+  await page.click('[data-action="back"]');
+  await page.waitForSelector('.entry-item');
+  assert.ok(page.url().startsWith(srv.base), 'Indietro resta nell’app');
+  assert.equal(new URL(page.url()).hash, '#/diario');
+  assert.deepEqual(errors, []);
+  await ctx.close();
+
+  // Aperta dentro un'altra app (qui lo user agent di Instagram su iPhone): prima va aperta in Safari.
+  ctx = await browser.newContext({ ...IPHONE, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/22F76 Instagram 389.0.0.0', locale: 'it-IT', timezoneId: 'Europe/Rome' });
+  ({ page } = await openApp(ctx, srv.base, '', { welcome: true }));
+  await page.waitForSelector('[data-testid="open-in-safari"]');
+  assert.match(await page.textContent('[data-testid="open-in-safari"]'), /Prima aprila in Safari/);
   await ctx.close();
 
   // Chi ha già dei ricordi (per esempio dopo un aggiornamento) non vede mai il benvenuto.
@@ -745,6 +780,18 @@ test('benvenuto: alla prima apertura, una volta sola; mai a chi ha già dei rico
   await createEntry(page, { title: 'Già nel diario' });
   await page.goto(srv.base);
   await page.waitForSelector('[data-testid="total-count"]');
+  assert.equal(await page.locator('.welcome').count(), 0);
+  // …e neanche dopo aver svuotato il diario: non è più la prima apertura.
+  await nav(page, '#/diario');
+  await page.click('.entry-item');
+  await page.waitForSelector('.memory-page');
+  await page.click('[data-action="delete"]');
+  await page.getByRole('button', { name: 'Elimina', exact: true }).click();
+  await page.waitForURL(/#\/diario$/);
+  await page.goto(srv.base);
+  await page.reload();
+  await page.waitForSelector('[data-testid="total-count"]');
+  assert.equal(await page.textContent('[data-testid="total-count"]'), '0');
   assert.equal(await page.locator('.welcome').count(), 0);
   await ctx.close();
 });
@@ -800,7 +847,7 @@ test('layout mobile: nessuno scorrimento orizzontale, elementi toccabili, screen
       await page.waitForTimeout(350);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       assert.ok(overflow <= 0, `${label} ${name}: scorrimento orizzontale di ${overflow}px`);
-      const small = await page.evaluate(() => [...document.querySelectorAll('.tab, .round-btn, .btn, .chip, .rating__star, .segmented__btn, .day-chip, .map-pin')]
+      const small = await page.evaluate(() => [...document.querySelectorAll('.tab, .round-btn, .btn, .chip, .rating__star, .segmented__btn, .day-chip, .map-pin, .backup__welcome')]
         .filter((el) => el.offsetParent !== null)
         .map((el) => ({ t: (el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 30), h: el.getBoundingClientRect().height, w: el.getBoundingClientRect().width }))
         .filter((r) => r.h < 44 || r.w < 44));

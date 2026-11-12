@@ -31,6 +31,8 @@ let current = null; // { route, hash, instance }
 let renderToken = 0;
 let ignoreNextHash = false;
 let hasHistory = false;
+let replacing = false; // il prossimo hashchange nasce da go(..., { replace: true })
+let readyToastPending = false;
 const scrollMemory = new Map();
 
 function parseHash() {
@@ -46,6 +48,9 @@ function parseHash() {
 export function go(path, { replace = false } = {}) {
   const target = `#${path}`;
   if (replace) {
+    // Una sostituzione non aggiunge voci alla cronologia: «Indietro» non deve contarla
+    // (altrimenti nell'app installata, che parte con una sola voce, Annulla e Indietro non fanno nulla).
+    if (location.hash !== target) replacing = true;
     location.replace(target);
   } else if (location.hash === target) {
     render();
@@ -138,14 +143,27 @@ async function render() {
   const heading = container.querySelector('h1') || container.querySelector('h2');
   (instance?.focus || heading)?.focus({ preventScroll: true });
   document.title = next.route.name === 'home' ? 'Gaia’s Wake' : `${heading?.textContent?.trim() || ''} · Gaia’s Wake`;
+  if (readyToastPending && next.route.name !== 'benvenuto') showReadyToast();
+}
+
+// «Pronta offline»: sul benvenuto coprirebbe i passi, quindi aspetta che Gaia passi alla schermata successiva.
+function showReadyToast() {
+  if (current?.route.name === 'benvenuto') {
+    readyToastPending = true;
+    return;
+  }
+  readyToastPending = false;
+  toast('Gaia’s Wake è pronta: d’ora in poi si apre anche offline.', { type: 'success', duration: 4500 });
 }
 
 window.addEventListener('hashchange', async (e) => {
+  const wasReplace = replacing;
+  replacing = false;
   if (ignoreNextHash) {
     ignoreNextHash = false;
     return;
   }
-  hasHistory = true;
+  if (!wasReplace) hasHistory = true;
   if (current?.instance?.isDirty?.()) {
     const ok = await confirmDialog({ title: 'Uscire senza salvare?', message: 'Le modifiche a questa uscita andranno perse.', confirm: 'Esci senza salvare', cancel: 'Continua a scrivere', danger: true });
     if (!ok) {
@@ -199,7 +217,7 @@ function registerServiceWorker() {
       worker.addEventListener('statechange', () => {
         if (worker.state !== 'installed') return;
         if (navigator.serviceWorker.controller) showUpdateBanner(worker);
-        else toast('Gaia’s Wake è pronta: d’ora in poi si apre anche offline.', { type: 'success', duration: 4500 });
+        else showReadyToast();
       });
     });
     document.addEventListener('visibilitychange', () => {

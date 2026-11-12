@@ -80,6 +80,8 @@ Importante: se tocca il link dentro WhatsApp si apre il browser interno di Whats
 
 ## 4. Aprirla sull’iPhone con Safari
 
+Alla prima apertura compare la pagina **«Benvenuta a bordo»**, con la barchetta e i tre passi per aggiungerla alla schermata Home (se è aperta dentro WhatsApp o un’altra app, chiede prima di aprirla in Safari). Nell’app già installata la stessa pagina spiega in tre passi come si usa. Compare una volta sola, e mai a chi ha già dei ricordi; si può rivedere da **Backup e dati**.
+
 1. Apri il link in **Safari**, con la connessione attiva (Wi-Fi o rete mobile).
 2. Aspetta qualche secondo nella Home dell’app: compare il messaggio
    **“Gaia’s Wake è pronta: d’ora in poi si apre anche offline.”**
@@ -88,8 +90,8 @@ Importante: se tocca il link dentro WhatsApp si apre il browser interno di Whats
 
 ## 5. Aggiungerla alla schermata Home
 
-1. In Safari tocca **Condividi** (il quadrato con la freccia verso l’alto).
-2. Scorri e tocca **Aggiungi alla schermata Home**, poi **Aggiungi**.
+1. In Safari tocca **Condividi** (il quadrato con la freccia verso l’alto). Su iOS 26, se non lo vedi, tocca prima **•••**; se la barra è ridotta, tocca l’indirizzo per farla ricomparire.
+2. Tocca **Aggiungi alla schermata Home** (se non c’è, tocca **Visualizza altro** o scorri l’elenco). Lascia attivo **Apri come app web**, se compare, poi tocca **Aggiungi**.
 3. Sulla schermata Home compare l’icona di Gaia’s Wake (il gommone sul lago).
 4. **Da questo momento usa sempre l’icona.**
 
@@ -198,6 +200,7 @@ I test controllano:
 - foto salvate **identiche all’originale byte per byte** (impronta SHA-256), anteprime separate;
 - solo la data obbligatoria, e nella pagina del ricordo solo i campi compilati;
 - persistenza dopo la chiusura e la riapertura del browser;
+- benvenuto: solo alla prima apertura, passi giusti in Safari, nell’app installata e dentro un’altra app, Annulla e Indietro che restano nell’app, mai a chi ha già avuto ricordi;
 - «un anno fa oggi»: anniversari esatti e vicini, a cavallo di Capodanno, 29 febbraio, apertura del ricordo dalla Home;
 - preferiti, galleria, ricerca per titolo, località o parole del diario (senza badare ad accenti e maiuscole, con l’estratto evidenziato), filtro;
 - riepilogo stagionale (conteggi, mesi, località più frequenti, cambio anno);
