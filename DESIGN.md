@@ -81,11 +81,12 @@ Ogni movimento deve aiutare a capire dove si è o cosa è successo; il resto è 
 - **Schede Foto · Dettagli · Diario**: il pannello entra dal lato della scheda scelta; la pillola blu scorre con un piccolo rimbalzo.
 - **Foto a schermo intero**: nasce dalla miniatura toccata (340ms).
 - **Salvataggio**: spunta e scia chiara che attraversa il pulsante (520ms), poi si apre il ricordo.
+- **Sempre in movimento**: un piccolo gommone naviga sulla mappa (Como → alto lago → Lecco → Como, sull'acqua, un giro in circa due minuti, fermo fuori schermo); una piccola onda a inchiostro scorre sotto i titoli delle pagine; una linea d'acqua azzurra scorre sopra la barra in basso.
 - **Mappa (acqua viva)**: segnaposti che cadono e galleggiano come boe con un cerchio d’acqua; riflessi chiari che si accendono sull’acqua; la rotta si disegna e poi scorre come una scia. Il titolo scorre più lento della mappa (parallasse).
 
 Regole:
 
 1. Si animano solo `transform` e `opacity` (fluidi anche su iPhone); niente animazioni di larghezze, ombre o filtri.
-2. Le animazioni continue esistono solo sulla mappa e negli stati vuoti, e si fermano quando la mappa esce dallo schermo.
+2. Le animazioni continue sono leggere (mappa, stati vuoti, onde sotto i titoli e sopra la barra); quelle della mappa si fermano quando la mappa esce dallo schermo.
 3. Con **Riduci movimento** (iPhone: Impostazioni › Accessibilità › Movimento) tutto si ferma: nessuna transizione, nessun galleggiamento, nessuna parallasse, nessuna attesa dopo il salvataggio.
 4. Niente animazioni che rimandano un’azione oltre mezzo secondo.

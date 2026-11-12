@@ -1,9 +1,9 @@
 // La mappa disegnata in Home: punti delle uscite, nomi dei paesi, anteprima e rotta sull'acqua.
 
-import { html, icon } from './ui.js';
+import { html, raw, icon } from './ui.js';
 import { photo } from './components.js';
 import { PLACES, VIEW, toRel, relToKm, entryPoint, findPlace, waterRoute, smoothPath, glintPoints } from './lake-map.js';
-import { pauseWhenHidden } from './motion.js';
+import { pauseWhenHidden, reducedMotion } from './motion.js';
 import { entryTitle, formatDateShort, plural } from './util.js';
 import { hydrateThumbs } from './photos.js';
 
@@ -34,6 +34,74 @@ function label(place, cls = '') {
   return html`<span class="map-label map-label--${place.side} ${cls}" style="left:${pct(r.x)};top:${pct(r.y)}" aria-hidden="true">${place.name}</span>`;
 }
 
+// Il gommone che naviga sempre sul lago: Como → alto lago → Lecco → Como, sull'acqua.
+// Rivolto a destra; la scia è a sinistra, dietro la poppa.
+const BOAT_SVG = '<svg viewBox="0 0 52 22" width="34" height="14">'
+  + '<g class="map-boat__wake" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round">'
+  + '<path d="M14 15C9 14 5 12 1 9"/><path d="M14 17C9 18 5 20 1 21"/><path d="M10 16H3" opacity=".7"/></g>'
+  + '<path d="M16 8H40C44 8 47 6 49 4C51 3 52 5 51 7C49 12 44 15 38 15H16A3.5 3.5 0 0 1 16 8Z" fill="#24467E"/>'
+  + '<path d="M17 11.5H40C43 11.5 46 10 48 8" fill="none" stroke="#A9C1E2" stroke-width="1.2" stroke-linecap="round"/>'
+  + '<path d="M27 8L28 3H32L35 8Z" fill="#24467E"/><circle cx="25" cy="2.8" r="1.6" fill="#24467E"/><path d="M24 8V5H26V8Z" fill="#24467E"/>'
+  + '<path d="M11 6H15L15 15H12Z" fill="#24467E"/></svg>';
+const VOYAGE = ['como', 'domaso', 'lecco', 'como'];
+
+function sailBoat(map) {
+  const boat = map.querySelector('.map-boat');
+  const svg = map.querySelector('.lake-map__routes');
+  if (!boat || !svg || reducedMotion() || typeof boat.animate !== 'function') {
+    boat?.remove();
+    return () => {};
+  }
+  // Rotta sull'acqua da tappa a tappa, campionata a passi regolari per una velocità costante.
+  const stops = VOYAGE.map((id) => PLACES.find((p) => p.id === id));
+  const pts = [];
+  for (let i = 0; i < stops.length - 1; i++) {
+    const leg = waterRoute([stops[i].x, stops[i].y], [stops[i + 1].x, stops[i + 1].y]);
+    pts.push(...(i ? leg.slice(1) : leg));
+  }
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', smoothPath(pts, false));
+  path.setAttribute('fill', 'none');
+  svg.appendChild(path);
+  const total = path.getTotalLength();
+  const N = 220;
+  const samples = Array.from({ length: N + 1 }, (_, i) => path.getPointAtLength((total * i) / N));
+  path.remove();
+
+  let anim = null;
+  let visible = true;
+  const build = () => {
+    const w = map.clientWidth;
+    const h = map.clientHeight;
+    if (!w || !h) return;
+    const progress = anim ? (anim.currentTime || 0) / (anim.effect.getTiming().duration || 1) : 0;
+    anim?.cancel();
+    let facing = 1;
+    const frames = samples.map((pt, i) => {
+      const next = samples[Math.min(N, i + 3)];
+      const prev = samples[Math.max(0, i - 3)];
+      const dx = next.x - prev.x;
+      if (Math.abs(dx) > 1.5) facing = dx >= 0 ? 1 : -1;
+      const x = (pt.x / VIEW.w) * w;
+      const y = (pt.y / VIEW.h) * h;
+      return { transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scaleX(${facing})` };
+    });
+    // Circa 22 ms per unità di disegno: un giro intero dura un paio di minuti.
+    anim = boat.animate(frames, { duration: Math.round(total * 22), iterations: Infinity, easing: 'linear' });
+    anim.currentTime = progress * Math.round(total * 22);
+    if (!visible) anim.pause();
+  };
+  build();
+  const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(() => build()) : null;
+  ro?.observe(map);
+  const io = typeof IntersectionObserver === 'function' ? new IntersectionObserver(([en]) => {
+    visible = en.isIntersecting;
+    if (visible) anim?.play(); else anim?.pause();
+  }) : null;
+  io?.observe(map);
+  return () => { ro?.disconnect(); io?.disconnect(); anim?.cancel(); };
+}
+
 // Disegna la mappa. `entries` già ordinate dalla più recente.
 export function renderMap(root, entries) {
   const { groups, without } = groupEntries(entries);
@@ -47,6 +115,7 @@ export function renderMap(root, entries) {
       <span class="lake-map__glints" aria-hidden="true">${glintPoints().map((g, i) => html`<span class="glint" style="left:${pct(g.x)};top:${pct(g.y)};--g:${i}"></span>`)}</span>
       <svg class="lake-map__routes" viewBox="0 0 ${VIEW.w} ${VIEW.h}" preserveAspectRatio="none" aria-hidden="true"><path class="lake-map__route" d=""/></svg>
       ${labels.map((p) => label(p, shown.has(p.id) ? 'map-label--strong' : ''))}
+      <span class="map-boat" aria-hidden="true">${raw(BOAT_SVG)}</span>
       <span class="map-lake-name" style="left:${pct(lakeName.x)};top:${pct(lakeName.y)}" aria-hidden="true">lago di como</span>
       ${groups.map((g, i) => html`
         <button type="button" class="map-pin" style="left:${pct(g.x)};top:${pct(g.y)};--i:${Math.min(i, 12)}" data-group="${i}"
@@ -65,6 +134,7 @@ export function renderMap(root, entries) {
   let stopThumbs = () => {};
   let selected = null;
   const stopPause = pauseWhenHidden(map);
+  const stopBoat = sailBoat(map);
 
   const drawRoute = (e) => {
     const to = entryPoint(e);
@@ -143,6 +213,7 @@ export function renderMap(root, entries) {
   return () => {
     stopThumbs();
     stopPause();
+    stopBoat();
     document.removeEventListener('keydown', onKey);
   };
 }

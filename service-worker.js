@@ -2,7 +2,7 @@
 // Non tocca mai IndexedDB: uscite e foto restano dove sono anche durante gli aggiornamenti.
 // Per pubblicare una nuova versione: aumenta VERSION (e APP_VERSION in js/util.js).
 
-const VERSION = '1.2.0';
+const VERSION = '1.2.1';
 const CACHE_PREFIX = 'gaias-wake-shell-';
 const CACHE = `${CACHE_PREFIX}${VERSION}`;
 
