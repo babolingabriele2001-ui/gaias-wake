@@ -729,6 +729,34 @@ p.eyebrow { margin: 0; }
 .tile__label { position: absolute; left: 10px; right: 10px; bottom: 10px; font-size: 13px; font-weight: 600; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .tile__badge { position: absolute; top: 8px; left: 8px; width: 26px; height: 26px; border-radius: 13px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.92); color: var(--rose); }
 
+/* «Un anno fa oggi»: un ricordo che torna, su carta azzurra con una piccola scia d'inchiostro. */
+.otd-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 96px;
+  padding: 12px 12px 12px 12px;
+  border-radius: var(--r-lg);
+  background: var(--azure-50);
+  box-shadow: inset 0 0 0 1px var(--azure-200), var(--shadow-1);
+  color: var(--ink);
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--dur-1) ease;
+}
+.otd-card:active { transform: scale(0.985); }
+.otd-card__cover { width: 72px; height: 72px; flex-shrink: 0; border-radius: 16px; }
+.otd-card__text { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.otd-card__when { font-family: var(--font-script); font-size: 19px; line-height: 1.2; color: var(--accent-2); }
+.otd-card__title { font-family: var(--font-display); font-size: 18px; line-height: 1.25; overflow-wrap: anywhere; }
+.otd-card__meta { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--muted); min-width: 0; }
+.otd-card__meta span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.otd-card__meta .icon { flex-shrink: 0; }
+.otd-card__go { width: 36px; height: 36px; flex-shrink: 0; border-radius: 18px; display: flex; align-items: center; justify-content: center; background: var(--surface); color: var(--accent); box-shadow: var(--shadow-1); }
+.otd-card__wake { position: absolute; right: 10px; bottom: 8px; width: 48px; height: 12px; z-index: -1; fill: none; stroke: var(--azure-300); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 1; animation: ink-draw 1.4s var(--ease-out) 0.5s backwards; }
+
 /* Righe dell'elenco (Diario, Stagione) */
 .entry-item {
   display: flex;

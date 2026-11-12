@@ -54,6 +54,7 @@ Nessun font scaricato: si usano quelli già presenti nel telefono.
 - **Data nel diario**: riquadro azzurro con filo `--azure-200`, giorno in serif.
 - **Campi**: fondo `--surface-2`, bordo `--field-line`; con il focus il fondo diventa carta e il bordo cobalto.
 - **Barra in basso**: carta traslucida; voce attiva navy con lineetta (non solo colore).
+- **Un anno fa oggi**: card azzurra con filo `--azure-200`, quando in corsivo calligrafico cobalto, titolo serif, piccola scia d’inchiostro che si disegna.
 - **Stati vuoti**: piccola illustrazione a incisione (barchetta, cuore sull’acqua, sole all’orizzonte), titolo serif, una frase, un’azione.
 
 ## Immagini

@@ -1,7 +1,7 @@
 import * as db from '../db.js';
 import { html, icon } from '../ui.js';
-import { featureCard, tile, emptyState, waves } from '../components.js';
-import { daysSince, isIOS, isStandalone } from '../util.js';
+import { featureCard, tile, emptyState, waves, onThisDayCard } from '../components.js';
+import { daysSince, isIOS, isStandalone, onThisDay } from '../util.js';
 import { hydrateThumbs } from '../photos.js';
 import { renderMap } from '../map-view.js';
 import { parallax } from '../motion.js';
@@ -48,6 +48,7 @@ export async function render(root) {
   const photoCount = entries.reduce((n, e) => n + (e.photoIds?.length || 0), 0);
   const favCount = entries.filter((e) => e.favorite).length;
   const latest = entries.slice(0, 5);
+  const memories = onThisDay(entries);
   const moments = [];
   for (const e of entries) {
     if (!e.favorite) continue;
@@ -101,6 +102,14 @@ export async function render(root) {
         <span class="cta-card__btn" aria-hidden="true">${icon('plus', { size: 22 })}</span>
         ${waves()}
       </a>
+
+      ${memories.length ? html`
+        <section class="section otd" aria-labelledby="otd-title" data-testid="on-this-day">
+          <div class="section__head">
+            <h2 class="section__title" id="otd-title">In questi giorni, sul lago</h2>
+          </div>
+          <div class="stack">${memories.map((m, i) => onThisDayCard(m, i + 2))}</div>
+        </section>` : ''}
 
       ${installHint(installDismissed)}
       ${backupReminder(entries, lastBackupAt)}

@@ -9,6 +9,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createZip, openZip } from '../js/zip.js';
 import { PLACES, toRel } from '../js/lake-map.js';
+import { onThisDay, onThisDayLabel } from '../js/util.js';
 import {
   ROOT, OUTPUT, IPHONE, startServer, launch, launchPersistent, makeFixtures, openApp, nav,
   createEntry, fillForm, addPhotos, dumpDB, clickButton, screenshot, sha256,
@@ -696,6 +697,42 @@ test('aggiornamento dell’app: nuova versione installata senza perdere i ricord
     srv.state.root = ROOT;
     await ctx.close();
   }
+});
+
+test('un anno fa oggi: calcolo degli anniversari', () => {
+  const E = (date, id) => ({ id, date });
+  const list = [E('2025-11-12', 'esatto'), E('2023-11-10', 'tre-anni'), E('2025-11-15', 'tra-tre'), E('2026-11-12', 'stesso-anno'), E('2025-11-20', 'lontano')];
+  const got = onThisDay(list, '2026-11-12');
+  assert.deepEqual(got.map((r) => r.entry.id), ['esatto', 'tre-anni', 'tra-tre'], 'prima oggi, poi i giorni vicini; mai l’anno in corso né date lontane');
+  assert.deepEqual(got.map(onThisDayLabel), ['Un anno fa, oggi', '3 anni fa, il 10 novembre', 'Un anno fa, il 15 novembre']);
+  assert.deepEqual(onThisDay([E('2025-12-31', 'capodanno')], '2027-01-01').map((r) => [r.entry.id, r.yearsAgo, r.days]), [['capodanno', 1, 1]], 'a cavallo dell’anno');
+  assert.deepEqual(onThisDay([E('2024-02-29', 'bisestile')], '2025-02-28').map(onThisDayLabel), ['Un anno fa, oggi'], '29 febbraio negli anni non bisestili');
+  assert.equal(onThisDayLabel({ entry: E('2025-11-08'), yearsAgo: 1, days: 4 }), 'Un anno fa, l’8 novembre');
+  assert.deepEqual(onThisDay([E('non-una-data', 'x')], '2026-11-12'), []);
+});
+
+test('un anno fa oggi: il ricordo compare in Home e si apre', async () => {
+  const ctx = await newContext();
+  const { page } = await openApp(ctx, srv.base);
+  // Oggi secondo il telefono (fuso di Roma), e la stessa data di un anno fa.
+  const today = await page.evaluate(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; });
+  const y = Number(today.slice(0, 4));
+  const md = today.slice(5) === '02-29' ? '02-28' : today.slice(5);
+  const far = new Date(Date.UTC(y - 1, Number(md.slice(0, 2)) - 1, Number(md.slice(3)) + 40)).toISOString().slice(0, 10);
+  await nav(page, '#/');
+  assert.equal(await page.locator('[data-testid="on-this-day"]').count(), 0, 'senza ricordi passati la sezione non c’è');
+  const id = await createEntry(page, { date: `${y - 1}-${md}`, title: 'Gita di un anno fa', destination: 'Colico', photos: [F('IMG_0003.jpg').path] });
+  await createEntry(page, { date: far, title: 'Troppo lontana' });
+  await createEntry(page, { date: today, title: 'Uscita di oggi' });
+  await nav(page, '#/');
+  const card = page.locator('[data-testid="on-this-day"] .otd-card');
+  assert.equal(await card.count(), 1);
+  assert.equal(await card.locator('.otd-card__when').textContent(), 'Un anno fa, oggi');
+  assert.equal(await card.locator('.otd-card__title').textContent(), 'Gita di un anno fa');
+  await card.click();
+  await page.waitForSelector('.memory-page__title');
+  assert.ok(page.url().endsWith(`#/uscita/${id}`));
+  await ctx.close();
 });
 
 test('layout mobile: nessuno scorrimento orizzontale, elementi toccabili, screenshot', async () => {

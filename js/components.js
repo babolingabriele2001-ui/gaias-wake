@@ -1,7 +1,7 @@
 // Pezzi di interfaccia riusati da più schermate.
 
 import { html, raw, icon } from './ui.js';
-import { entryTitle, placeLine, formatDateShort, formatMonthShort, plural } from './util.js';
+import { entryTitle, placeLine, formatDateShort, formatMonthShort, plural, onThisDayLabel } from './util.js';
 
 const STAR_PATH = 'm12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z';
 
@@ -52,6 +52,23 @@ export function tile(e, pid, index, i = 0) {
       <span class="tile__shade" aria-hidden="true"></span>
       <span class="tile__badge" aria-hidden="true">${icon('heart', { size: 14, fill: 'currentColor' })}</span>
       <span class="tile__label">${entryTitle(e)}</span>
+    </a>`;
+}
+
+// «Un anno fa oggi»: un ricordo degli anni passati caduto in questi giorni.
+export function onThisDayCard(item, i = 0) {
+  const e = item.entry;
+  const place = placeLine(e);
+  return html`
+    <a class="otd-card rise" style="--i:${i}" href="#/uscita/${e.id}">
+      ${cover(e, 'otd-card__cover')}
+      <span class="otd-card__text">
+        <span class="otd-card__when">${onThisDayLabel(item)}</span>
+        <span class="otd-card__title">${entryTitle(e)}</span>
+        ${place ? html`<span class="otd-card__meta">${icon('pin', { size: 13 })}<span>${place}</span></span>` : ''}
+      </span>
+      <span class="otd-card__go" aria-hidden="true">${icon('next', { size: 18 })}</span>
+      ${raw('<svg class="otd-card__wake" viewBox="0 0 120 24" aria-hidden="true" focusable="false"><path pathLength="1" d="M2 16c10 0 10-5 20-5s10 5 20 5 10-5 20-5 10 5 20 5 10-5 20-5 10 5 16 5"/></svg>')}
     </a>`;
 }
 

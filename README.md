@@ -120,7 +120,11 @@ Per controllare: icona dell’archivio in alto a destra nella Home › **Backup 
 - Niente GPS e niente mappe online: il disegno è un file locale. È un ricordo, non una carta nautica.
 - La mappa è «viva»: i segnaposti galleggiano come boe, sull’acqua si accendono piccoli riflessi e la rotta scorre come una scia. Sono animazioni leggere che si fermano quando la mappa non è sullo schermo.
 
-## 6 ter. Animazioni
+## 6 ter. In questi giorni, sul lago
+
+Nella Home, quando un’uscita degli anni passati cade oggi o a pochi giorni di distanza (fino a 3), compare la sezione **«In questi giorni, sul lago»**: per esempio «Un anno fa, oggi» oppure «3 anni fa, il 10 novembre». Toccandola si apre il ricordo. Se non ci sono ricordi in quei giorni, la sezione non compare.
+
+## 6 quater. Animazioni
 
 Le schermate scorrono nella direzione giusta (un ricordo entra da destra, tornando indietro da sinistra), le card compaiono una dopo l’altra, le foto si aprono dalla miniatura e salvando un’uscita il pulsante mostra una spunta con una piccola scia.
 Se sull’iPhone è attivo **Impostazioni › Accessibilità › Movimento › Riduci movimento**, tutte le animazioni si spengono.
@@ -194,6 +198,7 @@ I test controllano:
 - foto salvate **identiche all’originale byte per byte** (impronta SHA-256), anteprime separate;
 - solo la data obbligatoria, e nella pagina del ricordo solo i campi compilati;
 - persistenza dopo la chiusura e la riapertura del browser;
+- «un anno fa oggi»: anniversari esatti e vicini, a cavallo di Capodanno, 29 febbraio, apertura del ricordo dalla Home;
 - preferiti, galleria, ricerca per titolo, località o parole del diario (senza badare ad accenti e maiuscole, con l’estratto evidenziato), filtro;
 - riepilogo stagionale (conteggi, mesi, località più frequenti, cambio anno);
 - esportazione e ripristino completo, archivio verificato anche con un programma esterno, nessun doppione, sostituzione solo dopo conferma;

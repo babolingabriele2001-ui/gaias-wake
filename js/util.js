@@ -145,3 +145,40 @@ export function excerpt(text, q, radius = 42) {
   };
 }
 
+// «Un anno fa oggi»: uscite degli anni passati cadute oggi o a pochi giorni di distanza.
+// Restituisce [{ entry, yearsAgo, days }] (days: giorni dall'anniversario, 0 = proprio oggi),
+// prima quelle di oggi, poi le più vicine, poi le più recenti. Il 29 febbraio vale il 28 negli anni non bisestili.
+export function onThisDay(entries, today = todayISO(), windowDays = 3, max = 3) {
+  const t = utc(today);
+  const ty = t.getUTCFullYear();
+  const DAY = 86400000;
+  const anniversary = (iso, year) => {
+    const m = Number(iso.slice(5, 7)) - 1;
+    let d = Number(iso.slice(8, 10));
+    if (m === 1 && d === 29 && new Date(Date.UTC(year, 1, 29)).getUTCMonth() !== 1) d = 28;
+    return new Date(Date.UTC(year, m, d));
+  };
+  const out = [];
+  for (const entry of entries) {
+    if (!isValidISODate(entry.date)) continue;
+    const ey = yearOf(entry.date);
+    let best = null;
+    // L'anniversario più vicino può cadere l'anno prima o dopo (fine dicembre / inizio gennaio).
+    for (const y of [ty - 1, ty, ty + 1]) {
+      const days = Math.round((t - anniversary(entry.date, y)) / DAY);
+      if (y - ey >= 1 && Math.abs(days) <= windowDays && (!best || Math.abs(days) < Math.abs(best.days))) best = { entry, yearsAgo: y - ey, days };
+    }
+    if (best) out.push(best);
+  }
+  out.sort((a, b) => Math.abs(a.days) - Math.abs(b.days) || a.yearsAgo - b.yearsAgo || b.entry.date.localeCompare(a.entry.date));
+  return out.slice(0, max);
+}
+
+// Etichetta del ricordo: «Un anno fa, oggi», «3 anni fa, l’8 novembre», «2 anni fa, il 1º dicembre».
+export function onThisDayLabel({ entry, yearsAgo, days }) {
+  const years = yearsAgo === 1 ? 'Un anno fa' : `${yearsAgo} anni fa`;
+  if (days === 0) return `${years}, oggi`;
+  const d = Number(entry.date.slice(8, 10));
+  const day = d === 1 ? `il 1º ${MONTH_NAMES[monthIndexOf(entry.date)]}` : `${d === 8 || d === 11 ? 'l’' : 'il '}${formatDayMonth(entry.date)}`;
+  return `${years}, ${day}`;
+}
