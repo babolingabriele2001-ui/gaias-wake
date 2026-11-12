@@ -18,8 +18,11 @@ const targets = [
   ['icon-maskable-512.png', 512],
 ];
 
-// Favicon: la stessa icona con gli angoli arrotondati.
+// Favicon: la stessa icona con gli angoli arrotondati, senza i dettagli fini (class="dettaglio":
+// gabbiani, tratteggio dell'acqua, increspature) che a 16-32 px diventerebbero solo rumore.
 const favicon = svg
+  .replace(/<g class="dettaglio"[\s\S]*?<\/g>\s*/g, '')
+  .replace(/<path class="dettaglio"[^>]*\/>\s*/g, '')
   .replace('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><clipPath id="r"><rect width="512" height="512" rx="112"/></clipPath></defs><g clip-path="url(#r)">')
   .replace('</svg>', '</g></svg>');
 await writeFile(path.join(iconsDir, 'favicon.svg'), favicon);

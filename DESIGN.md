@@ -60,6 +60,7 @@ Nessun font scaricato: si usano quelli già presenti nel telefono.
 ## Immagini
 
 - Le foto di Gaia si mostrano **sempre originali**: niente filtri, ritagli salvati o compressione. Le animazioni muovono solo il riquadro, mai i pixel.
+- **Logo «Scia essenziale»** (`assets/icons/icon.svg`): fondo navy pieno, gommone bianco con Gaia al timone, scia a V, montagne del Lario a punta in secondo piano. Nell’app ha gli angoli arrotondati come l’icona dell’iPhone. Gli elementi con `class="dettaglio"` (gabbiani, tratteggio, increspature) spariscono nella favicon; dopo ogni modifica: `node tools/make-icons.mjs`.
 - Le illustrazioni sono locali (`assets/illustrations`, SVG inline) e solo in inchiostro blu.
 - Icone: set a tratto 1,8px in `js/ui.js`, mai emoji.
 

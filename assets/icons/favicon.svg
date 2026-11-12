@@ -5,43 +5,31 @@
       <stop offset="0" stop-color="#A9C1E2" stop-opacity=".75"/>
       <stop offset="1" stop-color="#5B7FBF" stop-opacity="0"/>
     </linearGradient>
-    <clipPath id="cuneo"><path d="M160 322C116 326 70 376 16 456L0 470V294C60 302 112 314 156 328Z"/></clipPath>
+    <clipPath id="cuneo"><path d="M160 322C116 326 68 378 0 474V294C60 302 112 314 156 328Z"/></clipPath>
   </defs>
 
   <!-- fondo navy pieno -->
   <rect width="512" height="512" fill="#24467E"/>
 
   <!-- gabbiani -->
-  <g fill="none" stroke="#C2D4EC" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity=".85">
-    <path d="M304 86c5-6 11-6 14 0c3-6 9-6 14 0"/>
-    <path d="M342 108c4-5 8-5 11 0c3-5 7-5 11 0"/>
-  </g>
-
-  <!-- montagne del lago: sagoma e versante in luce -->
-  <path d="M0 236V204C24 200 44 184 62 160L84 132C90 124 96 124 102 132L118 150L146 112C152 104 158 104 164 112L206 166L222 156C228 152 234 152 240 158L282 206C292 216 306 222 320 220L344 188C350 180 356 180 362 188L370 196L398 150C404 142 410 142 416 150L452 196C468 212 490 218 512 220V236Z" fill="#2F4F8C"/>
-  <path d="M146 112C152 104 158 104 164 112L206 166L222 156C228 152 234 152 240 158L282 206C292 216 306 222 320 220V236H170C160 210 162 170 155 140ZM398 150C404 142 410 142 416 150L452 196C468 212 490 218 512 220V236H418C412 214 414 180 407 160ZM84 132C90 124 96 124 102 132L118 150L132 170C126 196 126 216 130 236H96C92 210 96 170 93 144Z" fill="#3B63A3" opacity=".55"/>
+  <!-- montagne del Lario: sagoma e versante in luce, a punta come nella mappa -->
+  <path d="M0 236V204C24 200 44 184 62 160L84 132L93 118L102 132L118 150L146 112L155 98L164 112L206 166L222 156C228 152 234 152 240 158L282 206C292 216 306 222 320 220L344 188L353 174L362 188L370 196L398 150L407 136L416 150L452 196C468 212 490 218 512 220V244Z" fill="#3B63A3" opacity=".42"/>
+  <path d="M146 112L155 98L164 112L206 166L222 156C228 152 234 152 240 158L282 206C292 216 306 222 320 220V244H170C160 210 162 170 155 140ZM398 150L407 136L416 150L452 196C468 212 490 218 512 220V244H418C412 214 414 180 407 160ZM84 132L93 118L102 132L118 150L132 170C126 196 126 220 130 244H96C92 210 96 170 93 144Z" fill="#5B7FBF" opacity=".3"/>
   <!-- orizzonte -->
-  <path d="M0 236H512" stroke="#7E9CCB" stroke-width="3" opacity=".55"/>
+  <path d="M0 244H512" stroke="#7E9CCB" stroke-width="3" opacity=".55"/>
 
   <!-- acqua mossa dentro la V, a tratteggio come la mappa -->
-  <path d="M160 322C116 326 70 376 16 456L0 470V294C60 302 112 314 156 328Z" fill="url(#acqua)" opacity=".6"/>
-  <path clip-path="url(#cuneo)" d="M0 294H170 M0 303H170 M0 312H170 M0 321H170 M0 330H170 M0 339H170 M0 348H170 M0 357H170 M0 366H170 M0 375H170 M0 384H170 M0 393H170 M0 402H170 M0 411H170 M0 420H170 M0 429H170 M0 438H170 M0 447H170 M0 456H170 M0 465H170" stroke="url(#acqua)" stroke-width="3.5"/>
+  <path d="M160 322C116 326 68 378 0 474V294C60 302 112 314 156 328Z" fill="url(#acqua)" opacity=".6"/>
   <!-- braccio lontano della scia -->
-  <path d="M160 319C120 308 70 300 2 294C68 305 114 316 154 329Z" fill="#FFFFFF"/>
+  <path d="M150 322C120 310 70 300 0 291V299C68 307 114 318 148 330Z" fill="#FFFFFF"/>
   <!-- risucchio dell'elica -->
-  <path d="M146 330C110 334 72 344 26 362C72 352 112 344 148 340Z" fill="#A9C1E2"/>
+  <path d="M146 330C124 334 102 340 80 349C106 346 128 342 148 340Z" fill="#A9C1E2"/>
 
   <!-- riflesso e increspature -->
-  <g stroke="#5B7FBF" stroke-width="5" stroke-linecap="round" opacity=".8">
-    <path d="M214 346H306M324 346H368"/>
-    <path d="M248 364H340"/>
-  </g>
-  <path d="M330 420H404M372 446H430" stroke="#3B63A3" stroke-width="4" stroke-linecap="round"/>
-
   <!-- gommone, di lato, diretto a destra -->
   <g transform="translate(156 320)">
     <!-- carena -->
-    <path d="M14-16H206C196-4 176 0 156 0H14Z" fill="#7E9CCB"/>
+    <path d="M14-16H206C196-4 176 2 156 2H14Z" fill="#7E9CCB"/>
     <!-- Gaia al timone, coda di cavallo al vento -->
     <path d="M84-56L86-90C86-99 106-99 106-90L108-56Z" fill="#FFFFFF"/>
     <circle cx="97" cy="-108" r="10" fill="#FFFFFF"/>
@@ -49,14 +37,15 @@
     <!-- consolle e parabrezza -->
     <path d="M110-56L114-86H136L152-56Z" fill="#FFFFFF"/>
     <path d="M137-86H145L160-58H152Z" fill="#C2D4EC"/>
+    <path d="M103-84L118-72" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
     <!-- tubolare con la prua rialzata -->
     <path d="M8-60H170C196-60 216-66 234-78C247-86 262-80 260-66C258-50 240-32 218-22C204-16 190-14 172-14H8A23 23 0 0 1 8-60Z" fill="#FFFFFF"/>
     <path d="M12-37H174C198-37 218-44 238-58" fill="none" stroke="#C2D4EC" stroke-width="4" stroke-linecap="round"/>
     <!-- fuoribordo -->
-    <path d="M-32-82C-32-92-10-92-8-82L-6-58H-30Z" fill="#FFFFFF"/>
-    <path d="M-26-60H-12L-14-2H-24Z" fill="#FFFFFF"/>
+    <path d="M-26-76C-26-86-4-86-2-76L0-52H-24Z" fill="#FFFFFF"/>
+    <path d="M-20-54H-6L-10 4H-22Z" fill="#FFFFFF"/>
   </g>
 
   <!-- braccio vicino: l'onda di prua corre lungo lo scafo e si apre in un tratto di pennino -->
-  <path d="M420 300C400 313 362 318 310 319C250 320 198 320 162 322C118 326 72 374 14 458C84 396 122 354 164 336C204 326 270 325 330 324C382 322 408 314 420 300Z" fill="#FFFFFF"/>
+  <path d="M396 310C384 317 358 320 310 320C250 320 198 320 162 322C118 326 68 378 0 474V494C72 410 120 358 164 336C204 326 270 325 330 324C368 323 388 318 396 310Z" fill="#FFFFFF"/>
 </g></svg>
