@@ -707,7 +707,8 @@ console.log(`lake-map.svg ${(svg.length / 1024).toFixed(0)} KB · montagne ${mou
 if (warnings.length) console.log(`attenzione:\n  ${warnings.join('\n  ')}`);
 
 // ---------- WebP con trasparenza ----------
-const browser = await chromium.launch();
+// Con CHROMIUM_PATH si usa un Chrome/Edge già installato (come nei test).
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 try {
   const page = await browser.newPage();
   const dataUrl = await page.evaluate(async ({ src, w, h }) => {

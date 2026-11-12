@@ -114,7 +114,7 @@ Per controllare: icona dell’archivio in alto a destra nella Home › **Backup 
 
 ## 6 bis. La mappa disegnata
 
-- Se come **luogo di partenza** o **destinazione** Gaia scrive un paese del lago (Como, Cernobbio, Bellagio, Varenna, Menaggio, Lenno, Isola Comacina, Dongo, Domaso, Colico, Lecco… anche con nomi come «Villa d’Este», «Balbianello», «Villa Carlotta»), il punto compare da solo. Conta prima la destinazione, poi la partenza.
+- Se come **luogo di partenza** o **destinazione** Gaia scrive un paese del lago (Como, Cernobbio, Bellagio, Varenna, Menaggio, Lenno, Isola Comacina, Dongo, Domaso, Colico, Lecco… anche con nomi come «Villa d’Este», «Balbianello», «Villa Carlotta», e nell’alto lago «Corenno Plinio», «Consiglio di Rumo», «Dascio», «Pian di Spagna», «Forte di Fuentes»), il punto compare da solo. In cima al lago la mappa scrive sempre Dongo e Colico; gli altri paesi compaiono quando Gaia ci va. Conta prima la destinazione, poi la partenza.
 - Nel modulo dell’uscita, sezione **Punto sulla mappa**, può toccare la mappa per spostare il punto dove vuole; «Usa il luogo scritto» lo riporta sul paese.
 - Le uscite nello stesso posto diventano un solo punto con il numero; toccandolo compare un’anteprima con foto, data e titolo, e una linea tratteggiata segue sull’acqua il percorso dalla partenza.
 - Niente GPS e niente mappe online: il disegno è un file locale. È un ricordo, non una carta nautica.
@@ -194,7 +194,7 @@ I test controllano:
 - foto salvate **identiche all’originale byte per byte** (impronta SHA-256), anteprime separate;
 - solo la data obbligatoria, e nella pagina del ricordo solo i campi compilati;
 - persistenza dopo la chiusura e la riapertura del browser;
-- preferiti, galleria, ricerca per titolo o località (senza badare ad accenti e maiuscole), filtro;
+- preferiti, galleria, ricerca per titolo, località o parole del diario (senza badare ad accenti e maiuscole, con l’estratto evidenziato), filtro;
 - riepilogo stagionale (conteggi, mesi, località più frequenti, cambio anno);
 - esportazione e ripristino completo, archivio verificato anche con un programma esterno, nessun doppione, sostituzione solo dopo conferma;
 - file non validi, troncati o con foto danneggiate;

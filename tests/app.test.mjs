@@ -257,7 +257,7 @@ describe('uscite: creazione, modifica, preferiti, ricerca, stagione, eliminazion
     await page.waitForSelector('#panel-diario:has-text("non è ancora scritto")');
   });
 
-  test('diario: ordine cronologico, ricerca per titolo o località, filtro preferiti', async () => {
+  test('diario: ordine cronologico, ricerca per titolo, località e testo del diario, filtro preferiti', async () => {
     await nav(page, '#/diario');
     const titles = await page.$$eval('.entry-item__title', (els) => els.map((e) => e.textContent));
     assert.deepEqual(titles, ['Tramonto a Bellagio', 'Uscita del 5 luglio']);
@@ -265,6 +265,11 @@ describe('uscite: creazione, modifica, preferiti, ricerca, stagione, eliminazion
     await page.waitForFunction(() => document.querySelectorAll('.entry-item').length === 1);
     await page.fill('input[name="q"]', 'tramonto');
     await page.waitForFunction(() => document.querySelectorAll('.entry-item').length === 1);
+    // Parole che compaiono solo nel ricordo scritto: l'uscita si trova e si vede l'estratto evidenziato.
+    await page.fill('input[name="q"]', 'BRÉVA');
+    await page.waitForFunction(() => document.querySelectorAll('.entry-item').length === 1);
+    assert.equal(await page.textContent('.entry-item__snippet mark'), 'Breva');
+    assert.match(await page.textContent('.entry-item__snippet'), /Dal diario:.*Ritorno con la Breva/);
     await page.fill('input[name="q"]', 'Portofino');
     await page.waitForSelector('text=Nessuna uscita corrisponde alla ricerca.');
     await page.fill('input[name="q"]', '');

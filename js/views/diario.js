@@ -1,15 +1,29 @@
 import * as db from '../db.js';
 import { html, icon, paintSegmented } from '../ui.js';
 import { entryItem, emptyState } from '../components.js';
-import { normalize, formatMonthYear, plural } from '../util.js';
+import { normalize, formatMonthYear, plural, excerpt } from '../util.js';
 import { hydrateThumbs } from '../photos.js';
 
 // La ricerca e il filtro restano impostati mentre si apre un ricordo e si torna indietro.
 const state = { query: '', favOnly: false };
 
+// Titolo e luoghi, poi anche il ricordo scritto e chi era a bordo.
+const MAIN_FIELDS = ['title', 'departure', 'destination'];
+const TEXT_FIELDS = ['notes', 'crew'];
+
 function matches(e, q) {
   if (!q) return true;
-  return [e.title, e.departure, e.destination].some((f) => normalize(f).includes(q));
+  return [...MAIN_FIELDS, ...TEXT_FIELDS].some((f) => normalize(e[f]).includes(q));
+}
+
+// Se la parola non è nel titolo né nei luoghi, mostra dove compare nel testo.
+function snippetFor(e, q) {
+  if (!q || MAIN_FIELDS.some((f) => normalize(e[f]).includes(q))) return null;
+  for (const f of TEXT_FIELDS) {
+    const ex = excerpt(e[f], q);
+    if (ex) return { ...ex, label: f === 'crew' ? 'A bordo' : 'Dal diario' };
+  }
+  return null;
 }
 
 export async function render(root, { query }) {
@@ -28,8 +42,8 @@ export async function render(root, { query }) {
       ${entries.length ? html`
         <label class="search-pill search-pill--field">
           ${icon('search', { size: 20 })}
-          <span class="sr-only">Cerca per titolo o località</span>
-          <input type="search" name="q" placeholder="Cerca per titolo o località" autocomplete="off" enterkeyhint="search" value="${state.query}">
+          <span class="sr-only">Cerca per titolo, luogo o parole del diario</span>
+          <input type="search" name="q" placeholder="Cerca titoli, luoghi, ricordi" autocomplete="off" enterkeyhint="search" value="${state.query}">
         </label>
         <div class="segmented" role="group" aria-label="Filtro" data-filter>
           <span class="segmented__thumb" aria-hidden="true"></span>
@@ -68,7 +82,7 @@ export async function render(root, { query }) {
     list.innerHTML = html`${groups.map((g) => html`
       <section class="month">
         <h2 class="month__label">${g.label}</h2>
-        <div class="stack">${g.items.map((e) => entryItem(e, i++))}</div>
+        <div class="stack">${g.items.map((e) => entryItem(e, i++, { snippet: snippetFor(e, q) }))}</div>
       </section>`)}`.toString();
     stopThumbs = hydrateThumbs(list);
   };

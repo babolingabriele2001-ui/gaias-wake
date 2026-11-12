@@ -117,3 +117,31 @@ export function isIOS() {
 export function isStandalone() {
   return navigator.standalone === true || window.matchMedia?.('(display-mode: standalone)').matches;
 }
+
+// Cerca `q` (già normalizzata) in un testo senza badare ad accenti e maiuscole e restituisce un
+// breve estratto intorno alla parola trovata: { before, match, after }, oppure null.
+export function excerpt(text, q, radius = 42) {
+  const src = String(text ?? '');
+  if (!q || !src) return null;
+  let flat = '';
+  const at = []; // per ogni carattere del testo semplificato, la posizione nel testo originale
+  for (let i = 0; i < src.length; i++) {
+    const n = src[i].normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    for (const c of n) { flat += c; at.push(i); }
+  }
+  const k = flat.indexOf(q);
+  if (k < 0) return null;
+  const start = at[k];
+  const end = at[k + q.length - 1] + 1;
+  let from = Math.max(0, start - radius);
+  let to = Math.min(src.length, end + radius);
+  if (from > 0) { const sp = src.indexOf(' ', from); if (sp > -1 && sp < start) from = sp + 1; }
+  if (to < src.length) { const sp = src.lastIndexOf(' ', to); if (sp > end) to = sp; }
+  const clean = (t) => t.replace(/\s+/g, ' ');
+  return {
+    before: (from > 0 ? '…' : '') + clean(src.slice(from, start)),
+    match: src.slice(start, end),
+    after: clean(src.slice(end, to)) + (to < src.length ? '…' : ''),
+  };
+}
+

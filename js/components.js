@@ -56,7 +56,7 @@ export function tile(e, pid, index, i = 0) {
 }
 
 // Riga dell'elenco: data a sinistra, testo, anteprima della foto a destra.
-export function entryItem(e, i = 0) {
+export function entryItem(e, i = 0, { snippet = null } = {}) {
   const place = placeLine(e);
   const n = e.photoIds?.length || 0;
   return html`
@@ -69,6 +69,7 @@ export function entryItem(e, i = 0) {
         <span class="sr-only">${formatDateShort(e.date)}</span>
         <span class="entry-item__title">${entryTitle(e)}</span>
         ${place ? html`<span class="entry-item__meta">${icon('pin', { size: 14 })}<span>${place}</span></span>` : ''}
+        ${snippet ? html`<span class="entry-item__snippet"><span class="entry-item__snippet-label">${snippet.label}:</span> ${snippet.before}<mark>${snippet.match}</mark>${snippet.after}</span>` : ''}
         ${n || e.rating || e.favorite ? html`
           <span class="entry-item__tags">
             ${n ? html`<span class="tag">${icon('image', { size: 13 })}${n}</span>` : ''}
