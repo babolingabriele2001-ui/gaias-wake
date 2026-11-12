@@ -7,6 +7,8 @@
   --surface-2: #EFEBE3;
   --line: #E2DCD1;
   --line-strong: #D3CBBE;
+  --bg-glass: rgba(241, 237, 229, 0.92);      /* --bg traslucido: intestazioni fisse */
+  --surface-glass: rgba(251, 249, 245, 0.95); /* --surface traslucido: barra in basso */
   --hairline: rgba(36, 70, 126, 0.12);
   --ink: #1C2A44;
   --ink-2: #33415C;
@@ -144,7 +146,7 @@ body.no-tabbar .view { padding-bottom: 0; }
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: 6px 8px calc(6px + var(--bottom));
-  background: rgba(251, 249, 245, 0.95);
+  background: var(--surface-glass);
   -webkit-backdrop-filter: saturate(1.4) blur(14px);
   backdrop-filter: saturate(1.4) blur(14px);
   box-shadow: 0 -1px 0 var(--hairline), 0 -8px 24px rgba(28, 42, 68, 0.04);
@@ -186,7 +188,7 @@ body.no-tabbar .tabbar { display: none; }
   z-index: 10;
   margin: calc(-1 * (var(--top) + 16px)) -16px 0;
   padding: calc(var(--top) + 10px) 16px 10px;
-  background: rgba(241, 237, 229, 0.92);
+  background: var(--bg-glass);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
 }

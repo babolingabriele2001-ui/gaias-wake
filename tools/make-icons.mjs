@@ -24,7 +24,8 @@ const favicon = svg
   .replace('</svg>', '</g></svg>');
 await writeFile(path.join(iconsDir, 'favicon.svg'), favicon);
 
-const browser = await chromium.launch();
+// Con CHROMIUM_PATH si usa un Chrome/Edge già installato (come nei test).
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const page = await browser.newPage();
 for (const [name, size] of targets) {
   await page.setViewportSize({ width: size, height: size });
