@@ -1,5 +1,6 @@
 import * as db from '../db.js';
 import { html, raw, icon, toast, modal, confirmDialog, progress } from '../ui.js';
+import { wakeSuccess } from '../motion.js';
 import { notFound } from '../components.js';
 import { uuid, todayISO, isValidISODate, isImageFile, guessImageType, entryTitle } from '../util.js';
 import { createThumbnail, hydrateThumbs, forgetPhoto } from '../photos.js';
@@ -307,6 +308,8 @@ export async function render(root, { params, go, back }) {
       prog?.close();
       state.dirty = false;
       db.requestPersistence();
+      saveBtn.innerHTML = html`${icon('check', { size: 20 })}<span>${editing ? 'Aggiornata' : 'Salvata'}</span>`.toString();
+      await wakeSuccess(saveBtn, editing ? 'Uscita aggiornata' : 'Uscita salvata');
       toast(editing ? 'Ricordo aggiornato' : `«${entryTitle(entry)}» salvata nel diario`, { type: 'success' });
       go(`/uscita/${entry.id}`, { replace: true });
     } catch (err) {

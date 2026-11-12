@@ -4,6 +4,7 @@ import { featureCard, tile, emptyState, waves } from '../components.js';
 import { daysSince, isIOS, isStandalone } from '../util.js';
 import { hydrateThumbs } from '../photos.js';
 import { renderMap } from '../map-view.js';
+import { parallax } from '../motion.js';
 
 function backupReminder(entries, lastBackupAt) {
   if (!entries.length) return '';
@@ -147,5 +148,7 @@ export async function render(root) {
 
   const stopMap = renderMap(root.querySelector('[data-map-root]'), entries);
   const stopThumbs = hydrateThumbs(root);
-  return { cleanup: () => { stopMap(); stopThumbs(); } };
+  // Il titolo scorre più lento della mappa e sfuma: un velo di profondità, solo con transform e opacity.
+  const stopParallax = parallax(root.querySelector('.headline'));
+  return { cleanup: () => { stopMap(); stopThumbs(); stopParallax(); } };
 }

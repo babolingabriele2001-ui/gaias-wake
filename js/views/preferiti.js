@@ -20,7 +20,7 @@ export async function render(root) {
       </header>
 
       ${!favorites.length
-        ? emptyState({ title: 'Nessun preferito, per ora', text: 'Apri un ricordo e tocca il cuore: le sue foto compariranno in questa galleria.', action: html`<a class="btn btn--secondary" href="#/diario">Vai al diario</a>` })
+        ? emptyState({ art: 'heart', title: 'Nessun preferito, per ora', text: 'Apri un ricordo e tocca il cuore: le sue foto compariranno in questa galleria.', action: html`<a class="btn btn--secondary" href="#/diario">Vai al diario</a>` })
         : html`
           ${withPhotos.map((e, gi) => html`
             <section class="section fav-group rise" style="--i:${Math.min(gi, 6)}">

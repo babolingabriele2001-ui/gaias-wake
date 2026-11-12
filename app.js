@@ -9,6 +9,7 @@ import * as stagione from './js/views/stagione.js';
 import * as ricordo from './js/views/ricordo.js';
 import * as form from './js/views/form.js';
 import * as backupView from './js/views/backup.js';
+import { pageDirection } from './js/motion.js';
 
 const ROUTES = [
   { name: 'home', re: /^\/?$/, view: home, tab: 'home' },
@@ -126,9 +127,11 @@ async function render() {
     instance?.cleanup?.();
     return;
   }
+  const direction = pageDirection(current?.route, next.route);
   viewEl.replaceChildren(container);
   current = { route: next.route, hash: next.hash, instance };
-  container.classList.add('view-enter');
+  // Il modulo ha una barra fissa in basso: lì la pagina sfuma soltanto (una traslazione la sposterebbe).
+  container.classList.add('view-enter', `view-enter--${container.querySelector('.actionbar') ? 'fade' : direction}`);
   window.scrollTo(0, restoreScroll ?? 0);
   const heading = container.querySelector('h1') || container.querySelector('h2');
   (instance?.focus || heading)?.focus({ preventScroll: true });

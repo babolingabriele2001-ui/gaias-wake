@@ -3,6 +3,7 @@ import { html, icon, toast, confirmDialog, alertDialog, paintSegmented } from '.
 import { stars, notFound } from '../components.js';
 import { entryTitle, formatDateLong, placeLine } from '../util.js';
 import { hydrateThumbs, originalURL, forgetPhoto } from '../photos.js';
+import { zoomFrom } from '../motion.js';
 
 const FACTS = [
   ['departure', 'Partenza', 'pin'],
@@ -150,10 +151,17 @@ export async function render(root, { params, query, go, back }) {
   const panels = Object.fromEntries(TABS.map((t) => [t, root.querySelector(`#panel-${t}`)]));
   let carouselReady = false;
 
+  let shown = null;
   const showTab = (name, { focus = false, remember = true } = {}) => {
+    // Il pannello entra dal lato della scheda scelta: da destra se è più avanti, da sinistra se è prima.
+    const dir = shown === null ? 'up' : TABS.indexOf(name) > TABS.indexOf(shown) ? 'right' : TABS.indexOf(name) < TABS.indexOf(shown) ? 'left' : 'up';
+    shown = name;
     tab = name;
     paintSegmented(tablist, TABS.indexOf(name));
-    for (const t of TABS) panels[t].hidden = t !== name;
+    for (const t of TABS) {
+      panels[t].hidden = t !== name;
+      if (t === name) panels[t].dataset.enter = dir;
+    }
     if (remember) history.replaceState(history.state, '', `#/uscita/${entry.id}?tab=${name}`);
     if (focus) tabBtns[TABS.indexOf(name)].focus();
     if (name === 'foto' && n && !carouselReady) setupCarousel();
@@ -262,7 +270,14 @@ export async function render(root, { params, query, go, back }) {
       for (const en of list) if (en.isIntersecting) { io.unobserve(en.target); load(en.target); }
     }, { root: track, rootMargin: '0px 100%' });
     track.querySelectorAll('img').forEach((img) => io.observe(img));
-    requestAnimationFrame(() => { track.scrollLeft = index * track.clientWidth; });
+    requestAnimationFrame(() => {
+      track.scrollLeft = index * track.clientWidth;
+      const from = root.querySelector(`[data-open="${index}"] img`);
+      const to = track.children[index]?.querySelector('img');
+      // Finché l'originale non è pronto si parte dall'anteprima già caricata.
+      if (to && !to.getAttribute('src') && from?.currentSrc) to.src = from.currentSrc;
+      zoomFrom(from, to);
+    });
     track.addEventListener('scroll', () => {
       if (counter) counter.textContent = `${Math.round(track.scrollLeft / track.clientWidth) + 1} / ${n}`;
     }, { passive: true });

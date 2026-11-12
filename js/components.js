@@ -80,10 +80,37 @@ export function entryItem(e, i = 0) {
     </a>`;
 }
 
-export function emptyState({ title, text, action = '', level = 2 }) {
+// Piccole illustrazioni a incisione per gli stati vuoti (SVG locale, solo inchiostro blu).
+// Le linee con pathLength="1" si disegnano una volta, come un tratto di penna.
+const WATER = '<g class="ink-water">'
+  + '<path d="M18 92c10 0 10-3 20-3s10 3 20 3"/><path d="M176 96c9 0 9-3 18-3s9 3 18 3"/>'
+  + '<path d="M70 104c8 0 8-2.5 16-2.5s8 2.5 16 2.5"/><path d="M140 108c7 0 7-2 14-2s7 2 14 2"/>'
+  + '</g>';
+const ART = {
+  boat: WATER
+    + '<path class="ink-draw ink-faint" pathLength="1" d="M112 67c-12-1-24-3.5-38-7.5"/>'
+    + '<path class="ink-draw ink-draw--2 ink-faint" pathLength="1" d="M112 76c-14 2.5-28 6.5-44 12"/>'
+    + '<path class="ink-faint ink-dash" d="M66 57c-9-2-18-3-28-3M62 90c-9 3-18 5-28 6"/>'
+    + '<g class="ink-float"><path class="ink-fill" d="M112 64h82c-2 9-8 14-17 14h-55c-5 0-9-3-10-9z"/>'
+    + '<path d="M112 64h82c-2 9-8 14-17 14h-55c-5 0-9-3-10-9z"/><path d="M146 64v-11h17l5 11"/><path d="M128 64v-6"/>'
+    + '<path class="ink-faint" d="M194 70c4 2 6.5 5 8 9"/></g>',
+  heart: WATER
+    + '<ellipse class="ink-draw ink-faint" pathLength="1" cx="120" cy="84" rx="34" ry="7"/>'
+    + '<ellipse class="ink-draw ink-draw--2 ink-faint" pathLength="1" cx="120" cy="86" rx="62" ry="12"/>'
+    + '<g class="ink-float"><path class="ink-fill" d="M120 82s-20-12-20-27a11 11 0 0 1 20-6.5A11 11 0 0 1 140 55c0 15-20 27-20 27z"/>'
+    + '<path d="M120 82s-20-12-20-27a11 11 0 0 1 20-6.5A11 11 0 0 1 140 55c0 15-20 27-20 27z"/>'
+    + '<path class="ink-faint" d="M108 56c0-4 3-7 7-7"/></g>',
+  sun: WATER
+    + '<path d="M40 80h160" class="ink-faint"/>'
+    + '<g class="ink-float"><path class="ink-fill" d="M96 80a24 24 0 0 1 48 0z"/><path d="M96 80a24 24 0 0 1 48 0"/></g>'
+    + '<path class="ink-draw" pathLength="1" d="M120 48v-12M98 57l-8-8M142 57l8-8M88 72l-11-3M152 72l11-3"/>'
+    + '<path class="ink-draw ink-draw--2" pathLength="1" d="M104 88h32M110 95h20M115 102h10"/>',
+};
+
+export function emptyState({ title, text, action = '', level = 2, art = 'boat' }) {
   return html`
     <div class="empty rise">
-      <span class="empty__icon" aria-hidden="true">${icon('ripple', { size: 28 })}</span>
+      ${raw(`<svg class="empty__art" viewBox="0 0 240 120" aria-hidden="true" focusable="false">${ART[art] || ART.boat}</svg>`)}
       ${level === 1 ? html`<h1 class="empty__title" tabindex="-1">${title}</h1>` : html`<h2 class="empty__title">${title}</h2>`}
       <p class="empty__text">${text}</p>
       ${action}

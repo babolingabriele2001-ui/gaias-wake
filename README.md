@@ -118,6 +118,13 @@ Per controllare: icona dell’archivio in alto a destra nella Home › **Backup 
 - Nel modulo dell’uscita, sezione **Punto sulla mappa**, può toccare la mappa per spostare il punto dove vuole; «Usa il luogo scritto» lo riporta sul paese.
 - Le uscite nello stesso posto diventano un solo punto con il numero; toccandolo compare un’anteprima con foto, data e titolo, e una linea tratteggiata segue sull’acqua il percorso dalla partenza.
 - Niente GPS e niente mappe online: il disegno è un file locale. È un ricordo, non una carta nautica.
+- La mappa è «viva»: i segnaposti galleggiano come boe, sull’acqua si accendono piccoli riflessi e la rotta scorre come una scia. Sono animazioni leggere che si fermano quando la mappa non è sullo schermo.
+
+## 6 ter. Animazioni
+
+Le schermate scorrono nella direzione giusta (un ricordo entra da destra, tornando indietro da sinistra), le card compaiono una dopo l’altra, le foto si aprono dalla miniatura e salvando un’uscita il pulsante mostra una spunta con una piccola scia.
+Se sull’iPhone è attivo **Impostazioni › Accessibilità › Movimento › Riduci movimento**, tutte le animazioni si spengono.
+Le regole di colori, caratteri e movimento sono in [`DESIGN.md`](DESIGN.md).
 
 ## 7. Backup: esportare e ripristinare
 
@@ -221,13 +228,15 @@ La mappa nasce dal generatore `tools/build-map.mjs`, che usa la stessa geometria
 ```
 gaias-wake/
 ├─ index.html              pagina unica dell’app
-├─ styles.css              stile (carta panna, inchiostro blu, azzurro pastello; animazioni leggerissime)
+├─ styles.css              stile (carta panna, inchiostro blu, azzurro pastello; animazioni leggere)
+├─ DESIGN.md               colori, caratteri, componenti e regole del movimento
 ├─ app.js                  avvio, navigazione tra le schermate, service worker
 ├─ manifest.webmanifest    nome, icone, installazione
 ├─ service-worker.js       file in cache per l’uso offline e aggiornamenti
 ├─ js/
 │  ├─ lake-map.js          geometria della mappa del lago, paesi riconosciuti, rotte sull’acqua
 │  ├─ map-view.js          mappa in Home (punti, anteprima) e nel modulo (spostare il punto)
+│  ├─ motion.js            transizioni, parallasse, apertura foto, scia del salvataggio
 │  ├─ db.js                archivio IndexedDB (uscite, foto originali, anteprime)
 │  ├─ photos.js            anteprime e caricamento delle immagini
 │  ├─ zip.js               lettura/scrittura ZIP senza librerie esterne

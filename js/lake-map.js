@@ -213,3 +213,22 @@ export function waterRoute(fromKm, toKm) {
   // Toglie i punti quasi coincidenti, che renderebbero la curva spigolosa.
   return path.filter((p, i) => i === 0 || Math.hypot(p[0] - path[i - 1][0], p[1] - path[i - 1][1]) > 0.25);
 }
+
+// Punti per i riflessi animati sull'acqua (solo decorazione): a metà dei tratti dei tre rami,
+// spostati appena di lato in modo alternato. Coordinate relative (0–1) sul disegno.
+export function glintPoints() {
+  const out = [];
+  BRANCHES.forEach((line) => {
+    for (let i = 1; i < line.length - 1; i++) {
+      const [ax, ay] = line[i];
+      const [bx, by] = line[i + 1];
+      const side = (out.length % 2 ? 1 : -1) * 0.35;
+      const len = Math.hypot(bx - ax, by - ay) || 1;
+      const x = (ax + bx) / 2 + (-(by - ay) / len) * side;
+      const y = (ay + by) / 2 + ((bx - ax) / len) * side;
+      if (inLake(x, y)) out.push(toRel(x, y));
+    }
+  });
+  return out;
+}
+

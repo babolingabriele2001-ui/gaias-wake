@@ -1,6 +1,6 @@
 // Piccole funzioni di supporto: date, testi, identificativi.
 
-export const APP_VERSION = '1.1.0';
+export const APP_VERSION = '1.2.0';
 
 export function uuid() {
   if (globalThis.crypto && typeof crypto.randomUUID === 'function') {

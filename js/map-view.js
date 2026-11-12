@@ -2,7 +2,8 @@
 
 import { html, icon } from './ui.js';
 import { photo } from './components.js';
-import { PLACES, VIEW, toRel, relToKm, entryPoint, findPlace, waterRoute, smoothPath } from './lake-map.js';
+import { PLACES, VIEW, toRel, relToKm, entryPoint, findPlace, waterRoute, smoothPath, glintPoints } from './lake-map.js';
+import { pauseWhenHidden } from './motion.js';
 import { entryTitle, formatDateShort, plural } from './util.js';
 import { hydrateThumbs } from './photos.js';
 
@@ -43,13 +44,15 @@ export function renderMap(root, entries) {
   root.innerHTML = html`
     <div class="lake-map" data-map>
       <img class="lake-map__img" src="${MAP_SRC}" alt="Mappa disegnata del Lago di Como con i punti delle uscite" width="${VIEW.w}" height="${VIEW.h}">
+      <span class="lake-map__glints" aria-hidden="true">${glintPoints().map((g, i) => html`<span class="glint" style="left:${pct(g.x)};top:${pct(g.y)};--g:${i}"></span>`)}</span>
       <svg class="lake-map__routes" viewBox="0 0 ${VIEW.w} ${VIEW.h}" preserveAspectRatio="none" aria-hidden="true"><path class="lake-map__route" d=""/></svg>
       ${labels.map((p) => label(p, shown.has(p.id) ? 'map-label--strong' : ''))}
       <span class="map-lake-name" style="left:${pct(lakeName.x)};top:${pct(lakeName.y)}" aria-hidden="true">lago di como</span>
       ${groups.map((g, i) => html`
         <button type="button" class="map-pin" style="left:${pct(g.x)};top:${pct(g.y)};--i:${Math.min(i, 12)}" data-group="${i}"
           aria-label="${g.place ? g.place.name : 'Punto sulla mappa'}: ${plural(g.entries.length, 'uscita', 'uscite')}" aria-expanded="false">
-          <span class="map-pin__head">${g.entries.length > 1 ? html`<span class="map-pin__count">${g.entries.length}</span>` : html`<span class="map-pin__dot"></span>`}</span>
+          <span class="map-pin__buoy"><span class="map-pin__head">${g.entries.length > 1 ? html`<span class="map-pin__count">${g.entries.length}</span>` : html`<span class="map-pin__dot"></span>`}</span></span>
+          <span class="map-pin__ripple" aria-hidden="true"></span>
         </button>`)}
       ${!entries.length ? html`<p class="map-hint">I punti delle tue uscite compariranno qui</p>` : ''}
       <div class="map-sheet" data-sheet hidden></div>
@@ -61,6 +64,7 @@ export function renderMap(root, entries) {
   const route = root.querySelector('.lake-map__route');
   let stopThumbs = () => {};
   let selected = null;
+  const stopPause = pauseWhenHidden(map);
 
   const drawRoute = (e) => {
     const to = entryPoint(e);
@@ -138,6 +142,7 @@ export function renderMap(root, entries) {
 
   return () => {
     stopThumbs();
+    stopPause();
     document.removeEventListener('keydown', onKey);
   };
 }

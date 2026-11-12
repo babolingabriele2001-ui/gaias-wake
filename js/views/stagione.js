@@ -34,7 +34,7 @@ export async function render(root, { params, go }) {
     root.innerHTML = html`
       <div class="screen">
         <header class="topbar"><h1 class="topbar__title" tabindex="-1">Stagione</h1></header>
-        ${emptyState({ title: 'Nessuna stagione da raccontare', text: 'Quando registrerai le prime uscite, qui troverai il riepilogo di ogni anno.', action: html`<a class="btn btn--primary" href="#/nuova">${icon('plus', { size: 20 })}Aggiungi un’uscita</a>` })}
+        ${emptyState({ art: 'sun', title: 'Nessuna stagione da raccontare', text: 'Quando registrerai le prime uscite, qui troverai il riepilogo di ogni anno.', action: html`<a class="btn btn--primary" href="#/nuova">${icon('plus', { size: 20 })}Aggiungi un’uscita</a>` })}
       </div>`.toString();
     return {};
   }
