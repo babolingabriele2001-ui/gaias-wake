@@ -35,6 +35,7 @@ Non esiste un tema scuro: l’app è sempre «carta».
 
 Nessun font scaricato: si usano quelli già presenti nel telefono.
 
+- **Nome dell’app in Home**: «Gaia’s Wake» in `--font-display` corsivo, 40px, maiuscole e minuscole.
 - **Titoli e numeri**: `--font-display` (Baskerville su iPhone). Titoli di schermata in maiuscolo spaziato (27px), titoli del ricordo 29px, titoli delle uscite nel diario 18px.
 - **Testo**: `--font` (SF Pro), 16px di base; etichette 13,5px semibold; note 12–13px.
 - **Corsivo calligrafico**: `--font-script` solo per «lago di como» e «Il ricordo di oggi».
@@ -81,7 +82,7 @@ Ogni movimento deve aiutare a capire dove si è o cosa è successo; il resto è 
 - **Schede Foto · Dettagli · Diario**: il pannello entra dal lato della scheda scelta; la pillola blu scorre con un piccolo rimbalzo.
 - **Foto a schermo intero**: nasce dalla miniatura toccata (340ms).
 - **Salvataggio**: spunta e scia chiara che attraversa il pulsante (520ms), poi si apre il ricordo.
-- **Sempre in movimento**: un piccolo gommone naviga sulla mappa (Como → alto lago → Lecco → Como, sull'acqua, un giro in circa due minuti, fermo fuori schermo); una piccola onda a inchiostro scorre sotto i titoli delle pagine; una linea d'acqua azzurra scorre sopra la barra in basso.
+- **Sempre in movimento**: sulla mappa passano ogni tanto stormi di uccellini che battono le ali e soffi di vento sopra le montagne (fermi fuori schermo); una piccola onda a inchiostro scorre sotto i titoli delle pagine; una linea d'acqua azzurra scorre sopra la barra in basso.
 - **Mappa (acqua viva)**: segnaposti che cadono e galleggiano come boe con un cerchio d’acqua; riflessi chiari che si accendono sull’acqua; la rotta si disegna e poi scorre come una scia. Il titolo scorre più lento della mappa (parallasse).
 
 Regole:

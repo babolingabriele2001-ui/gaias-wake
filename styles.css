@@ -361,13 +361,36 @@ p.eyebrow { margin: 0; }
 .lake-map.is-paused .map-pin__ripple,
 .lake-map.is-paused .lake-map__route { animation-play-state: paused; }
 
-/* Il gommone che naviga sempre sul lago (posizione data da Web Animations, solo transform). */
-.map-boat { position: absolute; left: 0; top: 0; z-index: 1; width: 34px; height: 14px; margin: -11px 0 0 -17px; pointer-events: none; will-change: transform; }
-.map-boat svg { display: block; overflow: visible; animation: boat-rock 2.6s var(--ease-float) infinite; }
-.map-boat__wake { animation: wake-flicker 1.3s ease-in-out infinite alternate; }
-@keyframes boat-rock { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-1px) rotate(-2deg); } }
-@keyframes wake-flicker { from { opacity: 0.55; } to { opacity: 1; } }
-.lake-map.is-paused .map-boat svg, .lake-map.is-paused .map-boat__wake { animation-play-state: paused; }
+/* Vita sulla mappa: stormi che attraversano il cielo, ogni tanto, e soffi di vento sopra le montagne. */
+.map-life { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.map-flock {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 22px;
+  transform: translate3d(-12%, 0, 0);
+  animation: flock-pass var(--dur) linear infinite;
+  animation-delay: var(--delay);
+}
+.map-flock svg { display: block; overflow: visible; fill: none; stroke: var(--accent); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+/* Attraversano la mappa nel primo 60% del tempo, poi il cielo resta libero fino al passaggio successivo. */
+@keyframes flock-pass {
+  0% { transform: translate3d(-12%, 0, 0); }
+  30% { transform: translate3d(45%, -10px, 0); }
+  60%, 100% { transform: translate3d(108%, 4px, 0); }
+}
+.map-bird { transform-box: fill-box; transform-origin: 50% 70%; animation: wing 0.62s ease-in-out infinite alternate; animation-delay: calc(var(--k) * -0.21s); }
+@keyframes wing { from { transform: scaleY(1); } to { transform: scaleY(-0.35); } }
+.map-gust { position: absolute; opacity: 0; animation: gust var(--dur) ease-in-out infinite; animation-delay: var(--delay); }
+.map-gust svg { display: block; fill: none; stroke: var(--azure-500); stroke-width: 1.6; stroke-linecap: round; }
+@keyframes gust {
+  0% { opacity: 0; transform: translate3d(-14px, 2px, 0) scaleX(0.7); }
+  25% { opacity: 0.75; }
+  55% { opacity: 0.55; transform: translate3d(26px, -3px, 0) scaleX(1.05); }
+  75%, 100% { opacity: 0; transform: translate3d(44px, -1px, 0) scaleX(1.1); }
+}
+.lake-map.is-paused .map-flock, .lake-map.is-paused .map-bird, .lake-map.is-paused .map-gust { animation-play-state: paused; }
+
 .map-label {
   position: absolute;
   z-index: 1;
@@ -565,7 +588,7 @@ p.eyebrow { margin: 0; }
 
 .brand-mark { width: 40px; height: 40px; border-radius: 11px; box-shadow: var(--shadow-1); }
 .headline { margin-top: 16px; }
-.brand__name { margin: 0; font-family: var(--font-display); font-size: 31px; line-height: 1.1; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.brand__name { margin: 0; font-family: var(--font-display); font-size: 40px; line-height: 1.05; font-weight: 500; font-style: italic; letter-spacing: 0.01em; color: var(--ink); }
 .brand__slogan { display: flex; align-items: center; gap: 6px; margin: 4px 0 0; font-family: var(--font-script); font-size: 21px; line-height: 1.3; color: var(--accent-2); }
 .brand__slogan .icon { color: var(--azure-500); }
 

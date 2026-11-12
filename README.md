@@ -120,7 +120,7 @@ Per controllare: icona dell’archivio in alto a destra nella Home › **Backup 
 - Nel modulo dell’uscita, sezione **Punto sulla mappa**, può toccare la mappa per spostare il punto dove vuole; «Usa il luogo scritto» lo riporta sul paese.
 - Le uscite nello stesso posto diventano un solo punto con il numero; toccandolo compare un’anteprima con foto, data e titolo, e una linea tratteggiata segue sull’acqua il percorso dalla partenza.
 - Niente GPS e niente mappe online: il disegno è un file locale. È un ricordo, non una carta nautica.
-- La mappa è «viva»: un piccolo gommone naviga sempre sul lago, i segnaposti galleggiano come boe, sull’acqua si accendono piccoli riflessi e la rotta scorre come una scia. Sono animazioni leggere che si fermano quando la mappa non è sullo schermo.
+- La mappa è «viva»: ogni tanto passano stormi di uccellini, un venticello soffia sopra le montagne, i segnaposti galleggiano come boe, sull’acqua si accendono piccoli riflessi e la rotta scorre come una scia. Sono animazioni leggere che si fermano quando la mappa non è sullo schermo.
 
 ## 6 ter. In questi giorni, sul lago
 
