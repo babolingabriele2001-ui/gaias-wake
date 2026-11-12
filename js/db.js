@@ -265,6 +265,14 @@ export async function putThumb(rec) {
   await run('thumbs', 'readwrite', (s) => { s.thumbs.put(rec); });
 }
 
+export async function countEntries() {
+  return run('entries', 'readonly', (s) => {
+    let n = 0;
+    s.entries.count().onsuccess = (e) => { n = e.target.result; };
+    return () => n;
+  });
+}
+
 export async function countPhotos() {
   return run('photos', 'readonly', (s) => {
     let n = 0;

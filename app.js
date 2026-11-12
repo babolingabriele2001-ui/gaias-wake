@@ -9,6 +9,7 @@ import * as stagione from './js/views/stagione.js';
 import * as ricordo from './js/views/ricordo.js';
 import * as form from './js/views/form.js';
 import * as backupView from './js/views/backup.js';
+import * as benvenuto from './js/views/benvenuto.js';
 import { pageDirection } from './js/motion.js';
 
 const ROUTES = [
@@ -20,6 +21,7 @@ const ROUTES = [
   { name: 'nuova', re: /^\/nuova$/, view: form, sub: true },
   { name: 'modifica', re: /^\/modifica\/(?<id>[\w-]+)$/, view: form, sub: true },
   { name: 'backup', re: /^\/backup$/, view: backupView, sub: true },
+  { name: 'benvenuto', re: /^\/benvenuto$/, view: benvenuto, sub: true },
 ];
 
 const viewEl = document.getElementById('view');
@@ -227,6 +229,8 @@ async function start() {
       </div></div>`.toString();
     return;
   }
+  // Prima apertura con il diario vuoto: si parte dal benvenuto (senza aggiungere un passo alla cronologia).
+  if (parseHash().route.name === 'home' && await benvenuto.shouldShow()) history.replaceState(history.state, '', '#/benvenuto');
   await render();
   registerServiceWorker();
   db.cleanupOrphans().catch(() => {});

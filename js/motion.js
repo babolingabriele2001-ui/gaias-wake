@@ -11,7 +11,7 @@ const TAB_ORDER = ['home', 'diario', 'preferiti', 'stagione'];
 // fwd: si apre un dettaglio (da destra) · back: si torna a una sezione (da sinistra)
 // left/right: cambio di sezione nella barra in basso · up: da un dettaglio a un altro.
 export function pageDirection(prev, next) {
-  if (!prev) return 'up';
+  if (!prev || prev.name === 'benvenuto') return 'up';
   if (next.sub && !prev.sub) return 'fwd';
   if (!next.sub && prev.sub) return 'back';
   if (next.sub && prev.sub) return 'up';

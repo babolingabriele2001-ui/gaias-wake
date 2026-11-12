@@ -74,11 +74,17 @@ export function watchErrors(page) {
   return errors;
 }
 
-export async function openApp(context, base, hash = '') {
+// Alla prima apertura con il diario vuoto l'app mostra il benvenuto: di norma lo si chiude subito
+// («Ho capito» / «Inizia») per arrivare in Home; con { welcome: true } lo si lascia aperto.
+export async function openApp(context, base, hash = '', { welcome = false } = {}) {
   const page = await context.newPage();
   const errors = watchErrors(page);
   await page.goto(base + hash);
   await page.waitForSelector('.view__inner');
+  if (!welcome && await page.locator('[data-action="welcome-start"]').count()) {
+    await page.click('[data-action="welcome-start"]');
+    await page.waitForFunction(() => !document.querySelector('.welcome') && document.querySelector('.view__inner'));
+  }
   return { page, errors };
 }
 

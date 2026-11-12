@@ -125,10 +125,15 @@ const ART = {
     + '<path class="ink-draw ink-draw--2" pathLength="1" d="M104 88h32M110 95h20M115 102h10"/>',
 };
 
+// Illustrazione a incisione (decorativa): 'boat', 'heart' o 'sun'.
+export function inkArt(name = 'boat', cls = 'empty__art') {
+  return raw(`<svg class="${cls}" viewBox="0 0 240 120" aria-hidden="true" focusable="false">${ART[name] || ART.boat}</svg>`);
+}
+
 export function emptyState({ title, text, action = '', level = 2, art = 'boat' }) {
   return html`
     <div class="empty rise">
-      ${raw(`<svg class="empty__art" viewBox="0 0 240 120" aria-hidden="true" focusable="false">${ART[art] || ART.boat}</svg>`)}
+      ${inkArt(art)}
       ${level === 1 ? html`<h1 class="empty__title" tabindex="-1">${title}</h1>` : html`<h2 class="empty__title">${title}</h2>`}
       <p class="empty__text">${text}</p>
       ${action}

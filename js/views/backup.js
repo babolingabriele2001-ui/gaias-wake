@@ -77,6 +77,8 @@ export async function render(root, { back, rerender, offlineStatus }) {
             : 'Archivio normale del browser: il backup periodico resta importante.'}</span></p>
       </section>
 
+      <a class="link link--accent backup__welcome" href="#/benvenuto">${icon('info', { size: 16 })}${isIOS() && !isStandalone() ? 'Come aggiungerla alla schermata Home' : 'Rivedi il benvenuto'}</a>
+
       <p class="footnote muted">Gaia’s Wake è un diario personale: non è uno strumento di navigazione né di sicurezza nautica. Nessun dato lascia il dispositivo, salvo i backup che esporti tu. Versione ${APP_VERSION}.</p>
     </div>`.toString();
 

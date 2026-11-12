@@ -29,6 +29,7 @@ const SHELL = [
   './js/views/ricordo.js',
   './js/views/form.js',
   './js/views/backup.js',
+  './js/views/benvenuto.js',
   './assets/illustrations/lake-map.webp',
   './assets/textures/paper.webp',
   './assets/icons/icon.svg',

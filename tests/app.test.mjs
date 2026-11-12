@@ -699,6 +699,56 @@ test('aggiornamento dell’app: nuova versione installata senza perdere i ricord
   }
 });
 
+test('benvenuto: alla prima apertura, una volta sola; mai a chi ha già dei ricordi', async () => {
+  // In Safari su iPhone (non installata): i tre passi per la schermata Home.
+  let ctx = await newContext();
+  let { page, errors } = await openApp(ctx, srv.base, '', { welcome: true });
+  await page.waitForSelector('.welcome');
+  assert.equal(new URL(page.url()).hash, '#/benvenuto');
+  assert.equal(await page.textContent('h1'), 'Benvenuta a bordo');
+  assert.equal(await page.evaluate(() => document.activeElement?.tagName), 'H1', 'il titolo prende il fuoco');
+  assert.equal(await page.textContent('#welcome-steps'), 'Mettila nella schermata Home');
+  assert.deepEqual(await page.$$eval('.step__title', (els) => els.map((e) => e.textContent.trim())), ['Tocca Condividi', 'Scegli «Aggiungi alla schermata Home»', 'Apri Gaia’s Wake dall’icona']);
+  assert.equal(await page.locator('[data-action="welcome-new"]').count(), 0, 'in Safari non invita a salvare ricordi prima di installarla');
+  assert.equal(await page.locator('#tabbar').isVisible(), false);
+  await page.click('[data-action="welcome-start"]');
+  await page.waitForSelector('[data-testid="total-count"]');
+  assert.equal(new URL(page.url()).hash, '#/');
+  await page.reload();
+  await page.waitForSelector('[data-testid="total-count"]');
+  assert.equal(await page.locator('.welcome').count(), 0, 'il benvenuto non torna');
+  // Si può rivedere da «Backup e dati».
+  await nav(page, '#/backup');
+  await page.click('.backup__welcome');
+  await page.waitForSelector('.welcome');
+  await page.click('[data-action="welcome-start"]');
+  await page.waitForSelector('h1:text-is("Backup e dati")');
+  assert.deepEqual(errors, []);
+  await ctx.close();
+
+  // App già installata (standalone): tre passi su come si usa, e «Aggiungi la prima uscita» apre il modulo.
+  ctx = await newContext();
+  await ctx.addInitScript(() => Object.defineProperty(Navigator.prototype, 'standalone', { get: () => true }));
+  ({ page, errors } = await openApp(ctx, srv.base, '', { welcome: true }));
+  await page.waitForSelector('.welcome');
+  assert.equal(await page.textContent('#welcome-steps'), 'Come funziona');
+  assert.equal(await page.locator('.welcome__note').count(), 0);
+  await page.click('[data-action="welcome-new"]');
+  await page.waitForSelector('form.form');
+  assert.equal(new URL(page.url()).hash, '#/nuova');
+  assert.deepEqual(errors, []);
+  await ctx.close();
+
+  // Chi ha già dei ricordi (per esempio dopo un aggiornamento) non vede mai il benvenuto.
+  ctx = await newContext();
+  ({ page } = await openApp(ctx, srv.base, '#/nuova', { welcome: true }));
+  await createEntry(page, { title: 'Già nel diario' });
+  await page.goto(srv.base);
+  await page.waitForSelector('[data-testid="total-count"]');
+  assert.equal(await page.locator('.welcome').count(), 0);
+  await ctx.close();
+});
+
 test('un anno fa oggi: calcolo degli anniversari', () => {
   const E = (date, id) => ({ id, date });
   const list = [E('2025-11-12', 'esatto'), E('2023-11-10', 'tre-anni'), E('2025-11-15', 'tra-tre'), E('2026-11-12', 'stesso-anno'), E('2025-11-20', 'lontano')];
@@ -742,7 +792,7 @@ test('layout mobile: nessuno scorrimento orizzontale, elementi toccabili, screen
   await createEntry(page, { date: '2026-08-15', title: 'Ferragosto a Varenna', departure: 'Menaggio', destination: 'Varenna', rating: 5, photos: [F('Tramonto.png').path] });
   await createEntry(page, { date: '2025-07-05' });
 
-  const screens = [['home', '#/'], ['diario', '#/diario'], ['preferiti', '#/preferiti'], ['stagione', '#/stagione'], ['ricordo', `#/uscita/${id}`], ['nuova', '#/nuova'], ['backup', '#/backup']];
+  const screens = [['home', '#/'], ['diario', '#/diario'], ['preferiti', '#/preferiti'], ['stagione', '#/stagione'], ['ricordo', `#/uscita/${id}`], ['nuova', '#/nuova'], ['backup', '#/backup'], ['benvenuto', '#/benvenuto']];
   for (const [vw, vh, label] of [[375, 667, 'iphone-se'], [390, 844, 'iphone-13'], [430, 932, 'iphone-pro-max']]) {
     await page.setViewportSize({ width: vw, height: vh });
     for (const [name, hash] of screens) {
